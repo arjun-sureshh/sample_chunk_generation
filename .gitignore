@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual environment
+venv/
+.env
+
+# HuggingFace cache
+.cache/
+.huggingface/
+
+# AI model downloads
+models/
+*.safetensors
+*.bin
+*.pt
+
+# Video & image data
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.jpg
+*.png
+
+# Generated outputs
+result/
+chunks/
+frames/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
