@@ -3,7 +3,7 @@ import torch
 from transformers import AutoProcessor, AutoModelForVision2Seq
 from PIL import Image
 from dotenv import load_dotenv
-
+import cv2
 # ========================
 # CONFIG
 # ========================
@@ -48,6 +48,7 @@ def analyze_frames(frames):
 
     images = []
     for f in frames:
+        f = cv2.resize(f, (448, 448))   # VERY important
         images.append(Image.fromarray(f[:, :, ::-1]))  # BGR → RGB → PIL
 
     messages = [
@@ -71,7 +72,11 @@ def analyze_frames(frames):
     ).to(model.device)
 
     with torch.no_grad():
-        output = model.generate(**inputs, max_new_tokens=128)
+        output = model.generate(  
+        **inputs,
+        max_new_tokens=128,
+        do_sample=False,
+        temperature=0.0)
 
     result = processor.decode(output[0], skip_special_tokens=True)
     return result

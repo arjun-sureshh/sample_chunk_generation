@@ -2,6 +2,8 @@ import os
 import cv2
 import queue  
 
+MAX_VLM_FRAMES = 8 
+
 def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_per_second):
     
     while True:
@@ -26,7 +28,8 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
                 break
 
             if frame_id % interval == 0:
-                sampled_frames.append(frame)
+                if len(sampled_frames) < MAX_VLM_FRAMES:
+                    sampled_frames.append(frame)
                 cv2.imwrite(os.path.join(frame_dir, f"frame_{frame_id}.jpg"), frame)
 
             frame_id += 1
