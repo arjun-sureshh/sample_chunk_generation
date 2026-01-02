@@ -1,42 +1,77 @@
-import torch
-from transformers import AutoProcessor, AutoModelForImageTextToText
-from PIL import Image
 import os
+import torch
+from transformers import AutoProcessor, AutoModelForVision2Seq
+from PIL import Image
 from dotenv import load_dotenv
 
+# ========================
+# CONFIG
+# ========================
 MODEL_ID = "Qwen/Qwen2.5-VL-3B-Instruct"
+
 
 load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 print(f"[VLM] Loading {MODEL_ID}")
 
-processor = AutoProcessor.from_pretrained(MODEL_ID , use_fast=False , token=HF_TOKEN)
-model = AutoModelForImageTextToText.from_pretrained(
+# ========================
+# Processor
+# ========================
+processor = AutoProcessor.from_pretrained(
     MODEL_ID,
-    dtype=torch.float16,
-    token=HF_TOKEN,
-    device_map="auto"
+    trust_remote_code=True,
+    token=HF_TOKEN
 )
 
+# ========================
+# Model (GPU optimized)
+# ========================
+model = AutoModelForVision2Seq.from_pretrained(
+    MODEL_ID,
+    trust_remote_code=True,
+    torch_dtype=torch.float16,
+    device_map="auto",
+    token=HF_TOKEN
+)
+
+model.eval()
+print("[VLM] Model loaded successfully")
+
+# ========================
+# Inference
+# ========================
 def analyze_frames(frames):
     """
     frames = list of OpenCV images (BGR)
     """
-    pil_images = []
-    for f in frames:
-        # convert OpenCV → PIL
-        pil_images.append(Image.fromarray(f[:, :, ::-1]))
 
-    prompt = "Describe what is happening in these images."
+    images = []
+    for f in frames:
+        images.append(Image.fromarray(f[:, :, ::-1]))  # BGR → RGB → PIL
+
+    messages = [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Describe what is happening in these frames."},
+                *[{"type": "image", "image": img} for img in images]
+            ],
+        }
+    ]
+
+    text = processor.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=True
+    )
 
     inputs = processor(
-        images=pil_images,
-        text=prompt,
+        text=[text],
+        images=images,
         return_tensors="pt"
     ).to(model.device)
 
-    output = model.generate(**inputs, max_new_tokens=128)
+    with torch.no_grad():
+        output = model.generate(**inputs, max_new_tokens=128)
 
     result = processor.decode(output[0], skip_special_tokens=True)
     return result
