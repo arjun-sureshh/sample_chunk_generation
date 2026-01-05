@@ -51,11 +51,61 @@ def analyze_frames(frames):
         f = cv2.resize(f, (448, 448))   # VERY important
         images.append(Image.fromarray(f[:, :, ::-1]))  # BGR → RGB → PIL
 
+    PROMPT = """
+You are a professional AI retail video intelligence system analyzing a shop surveillance video.
+
+The video shows people with bounding boxes and tracking IDs.
+You must assign:
+- SID (Staff ID) → for employees
+- CID (Customer ID) → for customers
+
+Each SID and CID must remain consistent for the same person across all frames.
+Never merge, split, or rename IDs.
+
+TASKS:
+1. Detect all people in the video.
+2. Classify each person as Staff, Customer, or Unknown.
+3. Assign a unique SID to every staff member and CID to every customer.
+4. For each person, describe:
+   - Clothing (especially shirt color)
+   - What they are holding
+   - What actions they perform over time
+5. Identify staff wearing black shirts.
+6. Count total staff and customers.
+7. Describe the shop layout.
+8. Describe customer behavior.
+9. Provide a complete story of what happens.
+
+OUTPUT FORMAT:
+
+### People Detected
+List all SIDs and CIDs with dress and items.
+
+### Staff Wearing Black Shirts
+List all SIDs.
+
+### Individual Activity Timeline
+Show actions for each SID and CID.
+
+### Shop Description
+Describe store layout and type.
+
+### Customer Behavior Summary
+
+### Overall Video Summary
+
+### Key Activities
+Bullet points using SID and CID.
+
+### Suspicious or Unusual Activity
+If none: "No suspicious activity observed."
+"""
+
     messages = [
         {
             "role": "user",
             "content": [
-                {"type": "text", "text": "Describe what is happening in these frames."},
+                {"type": "text", "text": PROMPT},
                 *[{"type": "image", "image": img} for img in images]
             ],
         }
