@@ -6,8 +6,8 @@ __pycache__/
 *.log
 
 # Virtual environment
-venv/
-.env
+# venv/
+# .env
 
 # HuggingFace cache
 .cache/
