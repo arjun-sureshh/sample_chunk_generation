@@ -2,7 +2,6 @@ import os
 import cv2
 import queue  
 
-MAX_VLM_FRAMES = 8 
 
 def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_per_second):
     
@@ -14,7 +13,8 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
         video_path = chunk["chunk_path"]
         cap = cv2.VideoCapture(video_path)
         fps = cap.get(cv2.CAP_PROP_FPS)
-        interval = max(int(fps / frames_per_second), 1)  
+
+        interval = max(int(fps / frames_per_second), 1)
 
         sampled_frames = []
         frame_id = 0
@@ -28,16 +28,20 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
                 break
 
             if frame_id % interval == 0:
-                if len(sampled_frames) < MAX_VLM_FRAMES:
-                    sampled_frames.append(frame)
+                sampled_frames.append(frame)
                 cv2.imwrite(os.path.join(frame_dir, f"frame_{frame_id}.jpg"), frame)
 
             frame_id += 1
 
         cap.release()
+
         vlm_queue.put({
             "chunk_id": chunk["chunk_id"],
+            "chunk_path": chunk["chunk_path"],
             "video_path": chunk["video_path"],
+            "start_frame": chunk["start_frame"],
+            "end_frame": chunk["end_frame"],
+            "fps": fps,
             "frames": sampled_frames
         })
 

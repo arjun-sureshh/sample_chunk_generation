@@ -52,55 +52,76 @@ def analyze_frames(frames):
         images.append(Image.fromarray(f[:, :, ::-1]))  # BGR → RGB → PIL
 
     PROMPT = """
-You are a professional AI retail video intelligence system analyzing a shop surveillance video.
+You are a professional AI retail video intelligence system analyzing shop surveillance video to monitor staff activities.
 
 The video shows people with bounding boxes and tracking IDs.
-You must assign:
-- SID (Staff ID) → for employees
-- CID (Customer ID) → for customers
+Your primary focus is identifying STAFF MEMBERS by their BLACK SHIRT UNIFORM.
 
-Each SID and CID must remain consistent for the same person across all frames.
-Never merge, split, or rename IDs.
+ASSIGNMENT RULES:
+- Assign SID (Staff ID) ONLY to people wearing black shirts (staff uniform)
+- Each SID must remain consistent for the same person across all frames
+- Never merge, split, or rename IDs once assigned
 
 TASKS:
-1. Detect all people in the video.
-2. Classify each person as Staff, Customer, or Unknown.
-3. Assign a unique SID to every staff member and CID to every customer.
-4. For each person, describe:
-   - Clothing (especially shirt color)
-   - What they are holding
-   - What actions they perform over time
-5. Identify staff wearing black shirts.
-6. Count total staff and customers.
-7. Describe the shop layout.
-8. Describe customer behavior.
-9. Provide a complete story of what happens.
+1. Identify all staff members wearing black shirts
+2. Assign a unique SID to each staff member
+3. For each staff member, provide detailed description:
+   - Full clothing description (pants color, shoes, accessories)
+   - Physical characteristics (height estimate, build, hair, distinctive features)
+   - Any items they are carrying or holding
+4. Track what each staff member does throughout the video
+5. Identify suspicious activities, particularly:
+   - Staff using mobile phones during work
+   - Staff talking to each other for extended periods
+   - Staff idle or not attending to duties
+   - Any unusual behavior
+6. Count total number of staff detected
+7. Provide timeline of activities for each SID
 
 OUTPUT FORMAT:
 
-### People Detected
-List all SIDs and CIDs with dress and items.
+### Staff Members Detected (Total: X)
 
-### Staff Wearing Black Shirts
-List all SIDs.
+**SID-1:**
+- Uniform: Black shirt, [pants color], [shoe description]
+- Physical Description: [height/build/hair/distinctive features for manual identification]
+- Holding/Carrying: [items]
 
-### Individual Activity Timeline
-Show actions for each SID and CID.
+**SID-2:**
+[same format]
 
-### Shop Description
-Describe store layout and type.
+### Individual Staff Activity Timeline
 
-### Customer Behavior Summary
+**SID-1:**
+- 00:00-00:15: [action]
+- 00:15-00:45: [action]
+- [continue...]
 
-### Overall Video Summary
+**SID-2:**
+[same format]
 
-### Key Activities
-Bullet points using SID and CID.
+### Suspicious Activities Detected
 
-### Suspicious or Unusual Activity
-If none: "No suspicious activity observed."
+**Phone Usage:**
+- SID-X: Using phone at [timestamp] for [duration]
+
+**Extended Conversations:**
+- SID-X and SID-Y: Talking from [start time] to [end time] - Duration: [X minutes]
+
+**Idle Time:**
+- SID-X: Standing idle at [location] from [time] to [time]
+
+**Other Concerns:**
+[Any other unusual behavior]
+
+If no suspicious activity: "No suspicious activity observed."
+
+### Overall Staff Activity Summary
+Brief narrative of staff behavior throughout the video.
+
+### Manual Review Recommendations
+List SIDs requiring closer review with reasons and timestamps.
 """
-
     messages = [
         {
             "role": "user",
@@ -124,9 +145,15 @@ If none: "No suspicious activity observed."
     with torch.no_grad():
         output = model.generate(  
         **inputs,
-        max_new_tokens=128,
+        max_new_tokens=2048,
         do_sample=False,
-        temperature=0.0)
+        temperature=0.1,
+        top_p=0.9)
 
     result = processor.decode(output[0], skip_special_tokens=True)
+
+     # Extract only the assistant's response (remove the prompt)
+    if "assistant" in result:
+        result = result.split("assistant")[-1].strip()
+        
     return result
