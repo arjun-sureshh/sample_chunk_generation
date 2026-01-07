@@ -33,7 +33,7 @@ clean_directory(FRAMES_DIR)
 print("[SYSTEM] Output directories are fresh")
 
 
-video_path = "input.mp4"
+video_path = "LifeStyle-Footage-2min.mp4"
 chunk_duration = 30
 chunk_overlap = 2
 frames_per_second = 1
