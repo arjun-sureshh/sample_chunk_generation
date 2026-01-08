@@ -6,7 +6,8 @@ from vlm_worker import vlm_worker
 from utils import clean_directory
 import os
 from dotenv import load_dotenv
-
+from config import VIDEO
+from config import PATHS
 
 load_dotenv()
 
@@ -22,8 +23,8 @@ print("[SYSTEM] HuggingFace token loaded")
 chunk_queue = queue.Queue()
 vlm_queue = queue.Queue()
 
-CHUNKS_DIR = "result/chunks"
-FRAMES_DIR = "result/frames"
+CHUNKS_DIR = PATHS["chunks_dir"]
+FRAMES_DIR = PATHS["frames_dir"]
 
 print("[SYSTEM] Cleaning old outputs...")
 
@@ -33,10 +34,10 @@ clean_directory(FRAMES_DIR)
 print("[SYSTEM] Output directories are fresh")
 
 
-video_path = os.getenv("video_path")
-chunk_duration = 30
-chunk_overlap = 2
-frames_per_second = 1
+video_path = VIDEO["path"]
+chunk_duration = VIDEO["chunk_duration"]
+chunk_overlap = VIDEO["chunk_overlap"]
+frames_per_second = VIDEO["frames_per_second"]
 
 t1 = threading.Thread(target=generate_chunks, args=(video_path, chunk_duration, chunk_overlap, chunk_queue))
 t2 = threading.Thread(target=get_sampled_frames, args=(chunk_queue, vlm_queue, frames_per_second))

@@ -38,6 +38,7 @@ model = AutoModelForVision2Seq.from_pretrained(
 model.eval()
 print("[VLM] Model loaded successfully")
 
+PROMPT = os.getenv("PROMPT")
 # ========================
 # Inference
 # ========================
@@ -48,10 +49,10 @@ def analyze_frames(frames):
 
     images = []
     for f in frames:
-        f = cv2.resize(f, (448, 448))   # VERY important
+        f = cv2.resize(f, (640, 480))   # VERY important
         images.append(Image.fromarray(f[:, :, ::-1]))  # BGR → RGB → PIL
 
-    PROMPT = os.getenv("PROMPT")
+    
     messages = [
         {
             "role": "user",

@@ -13,10 +13,14 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
         video_path = chunk["chunk_path"]
         cap = cv2.VideoCapture(video_path)
         fps = cap.get(cv2.CAP_PROP_FPS)
+        print(f"sampler.py fps:{fps}")
 
         interval = max(int(fps / frames_per_second), 1)
 
+        print(f"sampler.py interval:{interval}")
+
         sampled_frames = []
+        frame_names = []
         frame_id = 0
 
         frame_dir = os.path.join("result", "frames", chunk["chunk_id"])
@@ -29,7 +33,11 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
 
             if frame_id % interval == 0:
                 sampled_frames.append(frame)
-                cv2.imwrite(os.path.join(frame_dir, f"frame_{frame_id}.jpg"), frame)
+                frame_name= os.path.join(frame_dir, f"frame_{frame_id}.jpg")
+                cv2.imwrite(frame_name, frame)
+                frame_names.append(frame_name)
+            else:
+                print(f"skipping frame {frame_id},{interval}")
 
             frame_id += 1
 
@@ -40,9 +48,10 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
             "chunk_path": chunk["chunk_path"],
             "video_path": chunk["video_path"],
             "start_frame": chunk["start_frame"],
-            "end_frame": chunk["end_frame"],
+            # "end_frame": chunk["end_frame"],
             "fps": fps,
-            "frames": sampled_frames
+            "frames": sampled_frames,
+            "frame_names": frame_names
         })
 
         print(f"[SAMPLER] Sampled {len(sampled_frames)} frames from chunk {chunk['chunk_id']}")
