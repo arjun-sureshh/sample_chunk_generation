@@ -9,7 +9,7 @@ from config import MODEL, VLM , RESIZE
 
 load_dotenv()
 
-MODEL_ID = MODEL["model_id"]
+MODEL_ID = MODEL["id"]
 HF_TOKEN = os.getenv("HF_TOKEN")
 PROMPT = VLM["prompt"]
 h = RESIZE["height"]

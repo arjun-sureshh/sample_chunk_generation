@@ -1,5 +1,5 @@
 video:
-  path: "input.mp4"
+  path: "videos/LifeStyle-Footage-2min.mp4"
   chunk_duration: 30
   chunk_overlap: 2
   frames_per_second: 1
@@ -11,7 +11,7 @@ model:
 paths:
   chunks_dir: "result/chunks"
   frames_dir: "result/frames"
-  
+
 resize :
   width: 640
   height: 480
