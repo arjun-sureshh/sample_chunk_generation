@@ -2,7 +2,7 @@ video:
   path: "videos/LifeStyle-Footage-2min.mp4"
   chunk_duration: 30
   chunk_overlap: 2
-  frames_per_second: 1
+  frames_per_second: 2
 
 model:
   id: "Qwen/Qwen3-VL-4B-Instruct"
