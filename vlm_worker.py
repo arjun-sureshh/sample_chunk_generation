@@ -29,7 +29,7 @@ def vlm_worker(vlm_queue):
                 with open(txt_path, "w", encoding="utf-8") as f:
                     f.write(summary)
                     f.write("\n" + str(fps))
-
+                print(f"summary:{summary}")
                 print(f"[VLM] Saved → {txt_path}")
 
             except Exception as e:
