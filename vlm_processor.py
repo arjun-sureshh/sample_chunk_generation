@@ -31,7 +31,7 @@ processor = AutoProcessor.from_pretrained(
 model = AutoModelForVision2Seq.from_pretrained(
     MODEL_ID,
     trust_remote_code=True,
-    torch_dtype=torch.float16,
+    dtype=torch.float16,
     device_map="auto",
     token=HF_TOKEN
 )

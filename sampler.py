@@ -36,8 +36,8 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
                 frame_name= os.path.join(frame_dir, f"frame_{frame_id}.jpg")
                 cv2.imwrite(frame_name, frame)
                 frame_names.append(frame_name)
-            else:
-                print(f"skipping frame {frame_id},{interval}")
+            # else:
+            #     print(f"skipping frame {frame_id},{interval}")
 
             frame_id += 1
 
