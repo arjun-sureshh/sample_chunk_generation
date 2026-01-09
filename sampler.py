@@ -47,7 +47,7 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
             "chunk_id": chunk["chunk_id"],
             "chunk_path": chunk["chunk_path"],
             "video_path": chunk["video_path"],
-            "start_frame": chunk["start_frame"],
+            "start_frame": chunk["start_frames"],
             # "end_frame": chunk["end_frame"],
             "fps": fps,
             "frames": sampled_frames,

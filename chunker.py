@@ -58,7 +58,7 @@ def generate_chunks(video_path: str, chunk_duration: int, chunk_overlap: int, ch
            
         chunk_queue.put({ 
             "chunk_id": f"chunk_{chunk_id}",
-            "start_frames": start_idx,
+            "start_frames": str(start_idx),
             "chunk_path": chunk_path,
             "video_path": video_path,
             })
