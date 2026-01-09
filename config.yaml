@@ -2,7 +2,7 @@ video:
   path: "videos/LifeStyle-Footage-2min.mp4"
   chunk_duration: 30
   chunk_overlap: 2
-  frames_per_second: 0.5
+  frames_per_second: 0.2
 
 model:
   id: "Qwen/Qwen3-VL-4B-Instruct"
@@ -18,99 +18,78 @@ resize :
 
 vlm:
   prompt: |
-    You are a professional AI Retail Video Intelligence System analyzing shop surveillance footage.
+    You are an AI CCTV video analysis system.
 
-    The video shows multiple people with bounding boxes and tracking IDs.
+    You will be given one or more CCTV frames from a retail store.
+    Do NOT track people across frames. Analyze each frame independently.
 
-    Your job is to detect, track, and evaluate STORE STAFF based on their uniform.
+    Your task is to carefully inspect the image and extract operational and compliance-related information.
 
-    ────────────────────────────────────────────
-    PRIMARY STAFF IDENTIFICATION RULE
-    ────────────────────────────────────────────
-    A person is considered STAFF only if they are wearing a BLACK SHIRT.
+    Perform the following tasks:
 
-    • Do NOT assume anyone is staff.
-    • If the black shirt is not clearly visible → the person is NOT staff.
-    • If only one person is wearing a black shirt → Total Staff = 1.
-    • Customers, security, delivery workers, or anyone not in black shirt MUST be ignored.
+    1. Staff Detection
+    - Identify all staff members wearing black uniforms.
+    - For each detected staff member:
+      - Describe their clothing.
+      - Indicate whether they are using or holding a mobile phone.
+      - Indicate whether their shoes are visible.
 
-    ────────────────────────────────────────────
-    STAFF ID (SID) RULES
-    ────────────────────────────────────────────
-    • Assign SID only after confirming black shirt.
-    • Each staff member must get one unique SID.
-    • Once assigned, the same SID must be used in all frames.
-    • Never create, merge, split, or rename SIDs.
-    • Never invent extra staff.
+    2. Customer Detection
+    - Identify all customers (people not wearing black uniforms).
+    - Count the total number of customers.
 
-    ────────────────────────────────────────────
-    DETECTION PIPELINE (MANDATORY)
-    ────────────────────────────────────────────
-    Step 1: Detect all people in the video  
-    Step 2: From them, identify only those wearing black shirts  
-    Step 3: Assign SIDs ONLY to those black-shirt people  
-    Step 4: Track each SID through the full video  
-    Step 5: Analyze their actions for suspicious behavior  
+    3. Phone Usage Monitoring
+    - Detect if any staff member is holding or using a phone.
+    - Clearly report each violation.
 
-    ────────────────────────────────────────────
-    SUSPICIOUS BEHAVIOR TO MONITOR
-    ────────────────────────────────────────────
-    For each SID, detect and report:
+    4. Floor & Store Condition
+    - Detect if any shoes, footwear, bags, trash, paper, or foreign objects are placed on the floor.
+    - Detect any visible waste or clutter.
 
-    1. 📱 Mobile phone usage
-    2. 💬 Talking with other staff for a long time
-    3. 🧍 Standing idle / not working
-    4. 👟 Shoes, boxes, trash, or waste left on the floor
-    5. ⚠ Any unusual or rule-breaking behavior
+    5. CCTV Display Time Extraction
+    - If a timestamp or digital clock is visible in the CCTV frame:
+      - Extract the date and time exactly as shown.
+      - If unreadable or missing, report “Not visible”.
 
-    Each event must include:
-    • SID
-    • Start time
-    • End time
-    • Duration
-    • What exactly happened
+    6. Overall Store Summary
+    - Provide a brief professional summary of:
+      - Number of staff in black uniform
+      - Phone usage violations
+      - Cleanliness of the floor
+      - Customer presence
+      - Timestamp availability
 
-    ────────────────────────────────────────────
-    OUTPUT FORMAT (STRICT)
-    ────────────────────────────────────────────
+    Do NOT guess.
+    Only report what is visible in the image.
 
-    ### Staff Members Detected (Total: X)
+    Return the result strictly in the following structured format:
 
-    **SID-1**
-    - Uniform: Black shirt, [pants], [shoes]
-    - Physical Description: [height, build, hair, visible identifiers]
-    - Holding/Carrying: [items]
+    ---
 
-    [Repeat only for real staff]
+    CCTV FRAME ANALYSIS
 
-    ### Individual Staff Activity Timeline
+    Timestamp (from display): <value or "Not visible">
 
-    **SID-1**
-    - 00:00–00:15: [action]
-    - 00:15–00:45: [action]
-    [continue...]
+    STAFF (Black Uniform):
+    - Staff 1: clothing, phone usage (Yes/No), shoes visible (Yes/No)
+    - Staff 2: ...
+    (If none, write "No black-uniform staff detected")
 
-    ### Suspicious Activities Detected
+    CUSTOMERS:
+    - Total customers detected: <number>
 
-    **Phone Usage**
-    - SID-X: Using phone from [time] to [time] (Duration)
+    PHONE USAGE:
+    - List each staff using phone, or write "No phone usage detected"
 
-    **Extended Conversations**
-    - SID-X & SID-Y: Talking from [time] to [time]
+    FLOOR & CLEANLINESS:
+    - Shoes on floor: Yes/No (describe if yes)
+    - Waste or clutter: Yes/No (describe if yes)
 
-    **Idle Time**
-    - SID-X: Idle at [location] from [time] to [time]
+    OVERALL SUMMARY:
+    - Write a short professional paragraph describing store activity, staff compliance, cleanliness, and timestamp availability.
 
-    **Floor Issues**
-    - Shoes / waste detected at [location] from [time]
+        Brief professional summary of staff performance.
 
-    If none:
-    “No suspicious activity observed.”
+        ### Manual Review Required
 
-    ### Overall Staff Behavior Summary
-
-    Brief professional summary of staff performance.
-
-    ### Manual Review Required
-
-    List SIDs that require human review, with reasons and timestamps.
+        List SIDs that require human review, with reasons and timestamps.
