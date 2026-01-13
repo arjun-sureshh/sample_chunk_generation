@@ -18,110 +18,65 @@ resize :
 
 vlm:
   prompt: |
-    You are an AI system analyzing a SINGLE CCTV FRAME (not a video and not a sequence).
-    You must NOT assume motion, past activity, or future movement.
-    Only describe what is directly visible in this single frame.
+    Role: You are a Security Compliance AI. You are analyzing a SINGLE STATIC FRAME. Objective: You must identify EVERY person in a black shirt, especially those near the edges and corners of the frame.
+    1. SPATIAL SCANNING RULE (MANDATORY)
+    Divide the image into four zones: Top-Left, Top-Right, Bottom-Left, Bottom-Right. Scan each zone individually. For every person found, check their clothing.
 
-    Your job is to analyze the CCTV image and produce a structured security and operations report.
+    2. STAFF IDENTIFICATION HIERARCHY
+    CONFIRMED STAFF: Wearing a BLACK SHIRT + a visible LANYARD, STRING, or ID TAG around the neck/chest.
 
-    Follow these rules strictly:
+    CANDIDATE STAFF: Wearing a BLACK SHIRT but the ID is blocked or unclear. You MUST report these individuals so they can be manually verified.
 
-    1. This is a static image, not a video.
-      Do NOT use words like "walked", "entered", "left", "earlier", "later", or any time-based tracking.
-      Describe only what is visible at this moment.
+    CUSTOMER: Anyone not wearing a black shirt.
 
-    2. STAFF IDENTIFICATION RULE (VERY IMPORTANT):
-      A person must be classified as STAFF if and only if:
-      - They are wearing a BLACK SHIRT, AND
-      - At least one of the following is visible:
-        • An ID card
-        • A lanyard
-        • A neck strap used to hold an ID
+    3. DETECTION GUIDELINES
+    Corner Focus: Pay extra attention to the far-left and far-right edges.
 
-      The ID card itself may not always be visible.
-      If the lanyard or tag wire is visible around the neck, it counts as staff identification.
+    Appearance Detail: For every staff/candidate, describe their pants color and shoe color. This is the only way to tell them apart.
 
-      Pants color does NOT matter.
+    Hand Analysis: Look specifically at the hands of every person in a black shirt. If a phone is visible, flag it as a VIOLATION.
 
-      Do NOT classify someone as staff if:
-      - They are wearing black but
-      - No ID card, lanyard, or tag wire is visible
-    3. Identify all STAFF based on the rule above.
-    4. For each staff member:
-      - Assign a label: Staff A, Staff B, Staff C, etc.
-      - Describe their:
-        • Exact position in the frame (left, center, right, near which display or shelf)
-        • Clothing and shoes (important for identification) and visible ID tag
-        • Whether a mobile phone is visible
-        • What they appear to be doing (only from what is visible)
+    Floor Check: Scan the floor for any shoes, trash, or boxes.
 
-    5. If a phone is visible:
-      - Clearly mark it as a PHONE USAGE VIOLATION
-      - Identify the staff by their location and appearance (not just "Staff 1" also say which staff it is)
-
-    6. Detect CUSTOMERS:
-      - Count all people who do NOT match the staff rule (black shirt + ID card)
-      - Do NOT include staff in the customer count
-
-
-    7. Read the CCTV TIMESTAMP from the display inside the frame.
-      - Extract and report the exact date and time as shown
-      - If not visible or unreadable, state "Not visible"
-
-    8. Check FLOOR & CLEANLINESS:
-      - Are any shoes placed on the floor?
-      - Is there any waste, trash, or clutter visible?
-
-    9. Do NOT guess or hallucinate.
-      If something is unclear, say "Not clearly visible".
-
-    10. Output must follow the format below exactly.
-
-    ======================
     OUTPUT FORMAT
-    ======================
+    CCTV SCAN SUMMARY
 
-    CCTV FRAME ANALYSIS
+    Timestamp (from frame): [Extract Date & Time]
 
-    Timestamp (from display): <time or "Not visible">
+    Total Confirmed Staff: [Count] who wear black shirts with visible IDs or Lanyards
 
-    STAFF (Black Uniform) — Total: <number>
+    Total People in Black Shirts: [Count]
 
-    Staff A:
-    - Location:
-    - Appearance (clothes (color of dress)& shoes):
-    - Phone visible: YES / NO (describe if yes)
-    - Visible activity:
+    Total Customers: [Count]
 
-    Staff B:
-    (repeat for all staff)
+    DETAILED STAFF AUDIT (List every person in a black shirt, even if they are in the corners)
 
-    CUSTOMERS — Total: <number>
-    (Customers counted excluding staff)
+    [Person 1]
 
-    PHONE USAGE VIOLATIONS:
-    - List each violating staff using their location & appearance
-    - If none, write: None detected
+    Zone: (e.g., Far Top-Left Corner, describe the location, like "near shelf" , "shoe section", "near the white shirt customer" etc.)
+
+    Status: [Confirmed Staff / Candidate Staff]
+
+    ID Check: [Describe what is visible on the chest/neck area]
+
+    Clothing: [Shirt type, Pants color, Shoe color]
+
+    Hand Activity: [What is in their hands? Is a phone visible?]
+
+    Activity: [Describe posture, e.g., "Standing near shelf"]
+
+    [Person 2]
+
+    (Repeat for all detected staff/candidates)
+
+    SECURITY & OPERATIONS CHECK
+
+    PHONE VIOLATIONS: [List Person ID and specific detail of usage]
 
     FLOOR & CLEANLINESS:
-    - Shoes on floor: YES / NO (describe if yes)
-    - Waste or clutter: YES / NO (describe if yes)
 
-    OVERALL SUMMARY:
-    Provide a clear, professional summary of:
-    - How many staff are present
-    - Whether any staff are violating phone usage
-    - Customer volume
-    - Cleanliness
-    - Timestamp status
+    Shoes on floor: [YES/NO - Location]
 
-    ======================
+    Waste/Clutter: [YES/NO - Location]
 
-    Remember:
-    You are analyzing ONE FRAME ONLY.
-    No tracking. No timelines. No guessing.
-    Only what is visible.
-
-
-
-
+    OVERALL SUMMARY: [A professional summary of staff count,Describe the store layout, compliance status, and store cleanliness.]
