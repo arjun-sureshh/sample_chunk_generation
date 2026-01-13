@@ -5,7 +5,7 @@ video:
   frames_per_second: 0.2
 
 model:
-  id: "Qwen/Qwen3-VL-4B-Instruct"
+  id: "Qwen/Qwen3-VL-8B-Instruct"
   max_tokens: 512
 
 paths:
