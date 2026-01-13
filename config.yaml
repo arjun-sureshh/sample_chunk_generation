@@ -30,39 +30,52 @@ vlm:
       Do NOT use words like "walked", "entered", "left", "earlier", "later", or any time-based tracking.
       Describe only what is visible at this moment.
 
-    2. Identify all STAFF wearing BLACK uniforms (black shirt and black pants).
-      Treat anyone wearing black uniform as staff.
-      Customers must NOT be counted as staff.
+    2. STAFF IDENTIFICATION RULE (VERY IMPORTANT):
+      A person must be classified as STAFF if and only if:
+      - They are wearing a BLACK SHIRT, AND
+      - At least one of the following is visible:
+        • An ID card
+        • A lanyard
+        • A neck strap used to hold an ID
 
-    3. For each staff member:
+      The ID card itself may not always be visible.
+      If the lanyard or tag wire is visible around the neck, it counts as staff identification.
+
+      Pants color does NOT matter.
+
+      Do NOT classify someone as staff if:
+      - They are wearing black but
+      - No ID card, lanyard, or tag wire is visible
+    3. Identify all STAFF based on the rule above.
+    4. For each staff member:
       - Assign a label: Staff A, Staff B, Staff C, etc.
       - Describe their:
         • Exact position in the frame (left, center, right, near which display or shelf)
-        • Clothing and shoes (important for identification)
+        • Clothing and shoes (important for identification) and visible ID tag
         • Whether a mobile phone is visible
         • What they appear to be doing (only from what is visible)
 
-    4. If a phone is visible:
+    5. If a phone is visible:
       - Clearly mark it as a PHONE USAGE VIOLATION
       - Identify the staff by their location and appearance (not just "Staff 1" also say which staff it is)
 
-    5. Detect CUSTOMERS:
-      - Count only people who are NOT wearing black staff uniform
+    6. Detect CUSTOMERS:
+      - Count all people who do NOT match the staff rule (black shirt + ID card)
       - Do NOT include staff in the customer count
 
-    6. Read the CCTV TIMESTAMP from the display inside the frame.
+
+    7. Read the CCTV TIMESTAMP from the display inside the frame.
       - Extract and report the exact date and time as shown
       - If not visible or unreadable, state "Not visible"
 
-    7. Check FLOOR & CLEANLINESS:
+    8. Check FLOOR & CLEANLINESS:
       - Are any shoes placed on the floor?
       - Is there any waste, trash, or clutter visible?
 
-    8. Do NOT guess or hallucinate.
+    9. Do NOT guess or hallucinate.
       If something is unclear, say "Not clearly visible".
 
-    9. Output must follow the format below exactly.
-
+    10. Output must follow the format below exactly.
 
     ======================
     OUTPUT FORMAT
