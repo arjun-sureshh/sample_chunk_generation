@@ -34,8 +34,12 @@ vlm:
 
     Appearance Detail: For every staff/candidate, describe their pants color and shoe color. This is the only way to tell them apart.
 
-    Hand Analysis: Look specifically at the hands of every person in a black shirt. If a phone is visible, flag it as a VIOLATION.
+    ANTI-HALLUCINATION PHONE CHECK (CRITICAL):
+    To avoid false phone detections when a hand is simply bent:
 
+    Evidence Rule: Only report a PHONE USAGE VIOLATION if you can see a rectangular device in the hand or the glow of a screen.
+
+    Observation Requirement: If a staff member's arm is bent, describe the hand specifically (e.g., "Hand is empty," "Hand is touching face," or "Holding a black rectangular device"). If no device is clearly visible, report "No phone detected."
     Floor Check: Scan the floor for any shoes, trash, or boxes.
 
     OUTPUT FORMAT
@@ -53,7 +57,7 @@ vlm:
 
     [Person 1]
 
-    Zone: (e.g., Far Top-Left Corner, describe the location, like "near shelf" , "shoe section", "near the white shirt customer" etc.)
+    Zone: Zone & Location: [Zone + Detailed description, e.g., "Bottom-Left corner, near the '799' footwear rack", "near the staff or white shirt customer"]
 
     Status: [Confirmed Staff / Candidate Staff]
 
@@ -61,9 +65,9 @@ vlm:
 
     Clothing: [Shirt type, Pants color, Shoe color]
 
-    Hand Activity: [What is in their hands? Is a phone visible?]
+    Hand & Phone Analysis: [Describe the position of both hands. Are they empty? Is a phone visible? Provide visual proof of the object or state "No device visible."]
 
-    Activity: [Describe posture, e.g., "Standing near shelf"]
+    Visible Activity: [e.g., Standing, looking at shoes, hands at sides]
 
     [Person 2]
 
@@ -79,4 +83,4 @@ vlm:
 
     Waste/Clutter: [YES/NO - Location]
 
-    OVERALL SUMMARY: [A professional summary of staff count,Describe the store layout, compliance status, and store cleanliness.]
+    OVERALL SUMMARY: [A professional summary of staff count,Describe the store layout, compliance status, and store cleanliness,Count of people NOT in black shirts.]
