@@ -54,15 +54,6 @@ vlm:
 
     Floor & Safety: [Confirm if floor surface was scanned for debris]
 
-    QUADRANT HEADCOUNT (Validation):
-
-        Top-Left (TL): [Number of total people, number of black shirts detected, number of confirmed staff among them also (describe),e.g: 5 total,3 black shirt ,2 confirmed staff]
-        Top-Right (TR): [Number of total people, number of black shirts detected, number of confirmed staff among them (describe),e.g: 5 total,3 black shirt ,2 confirmed staff]
-        Bottom-Left (BL): [Number of total people, number of black shirts detected, number of confirmed staff among them (describe),e.g: 5 total,3 black shirt ,2 confirmed staff]
-        Bottom-Right (BR): [Number of total people, number of black shirts detected, number of confirmed staff among them (describe),e.g: 5 total,3 black shirt ,2 confirmed staff]
-
-        TOTAL PEOPLE DETECTED: [Sum of all quadrants]
-
     CCTV SCAN SUMMARY
 
     Timestamp (from frame): [Extract Date & Time]
