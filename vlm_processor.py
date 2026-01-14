@@ -74,10 +74,10 @@ def analyze_frame(frame_path):
     with torch.no_grad():
         output = model.generate(
             **inputs,
-            max_new_tokens=512,
+            max_new_tokens=2048,
             do_sample=False,
-            temperature=0.1,
-            top_p=0.9
+            temperature=0.0,
+            top_p=0.95
         )
 
     result = processor.decode(output[0], skip_special_tokens=True)
