@@ -6,7 +6,7 @@ video:
 
 model:
   id: "Qwen/Qwen3-VL-8B-Instruct"
-  max_tokens: 512
+  max_tokens: 1024
 
 paths:
   chunks_dir: "result/chunks"

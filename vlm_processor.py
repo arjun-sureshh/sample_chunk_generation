@@ -15,6 +15,7 @@ PROMPT = VLM["prompt"]
 h = RESIZE["height"]
 w = RESIZE["width"]
 print(f"[VLM] Loading {MODEL_ID}")
+MAX_TOKENS = MODEL["max_tokens"]
 
 # ========================
 # Load Processor
@@ -74,7 +75,7 @@ def analyze_frame(frame_path):
     with torch.no_grad():
         output = model.generate(
             **inputs,
-            max_new_tokens=512,
+            max_new_tokens=MAX_TOKENS,
             do_sample=False,
             temperature=0.1,
             top_p=0.9
