@@ -77,7 +77,7 @@ def analyze_frame(frame_path):
             **inputs,
             max_new_tokens=MAX_TOKENS,
             do_sample=False,
-            temperature=0.1,
+            temperature=0,
             top_p=0.9
         )
 

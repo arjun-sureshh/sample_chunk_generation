@@ -13,80 +13,44 @@ paths:
   frames_dir: "result/frames"
 
 resize :
-  width: 640
-  height: 480
+  width: 1024
+  height: 768
 
 vlm:
   prompt: |
-    Role: You are a Security Compliance AI. You are analyzing a SINGLE STATIC FRAME. Objective: Identify every person in a black shirt or black top and detect operational violations like staff crowding or phone usage.
+vlm:
+  prompt: |
+    Role: You are a high-precision Forensic Security Analyst. You are analyzing a SINGLE STATIC FRAME.
+    Task: Identify all staff (black shirts) and detect violations. 
 
-    1. SPATIAL QUADRANT RULE (MANDATORY)
-    Divide the frame into 4 equal quadrants. You must perform a headcount for each zone before detailing the individuals:
+    STRICT LOGIC RULES:
+    1. ANTI-TEMPLATE RULE: Do not use the same "Activity" or "Clothing Detail" for every person. Look for small differences (e.g., sleeve length, tucked/untucked shirt, specific shoe brand logo, hair style, or posture).
+    2. CROWDING AUDIT: If two staff members are in the same Zone or within 2 meters of each other, you MUST classify them as a GROUP. Analyze if they are facing each other (talking) or facing customers.
+    3. PHONE DETECTION: Zoom in mentally on every hand. If a staff member’s hand is near their waist or chest, look for the sharp edge of a phone or a screen glow. If they are holding a phone, flag it as a CRITICAL VIOLATION.
+    4. POSITIONING: Use landmarks (399 sign, 799 sign, ROCIA rack) to describe the exact tile or shelf they are near.
 
-    2. LANDMARK ZONE DEFINITION
-    Divide the frame into these 4 specific areas based on store fixtures:
+    LANDMARK ZONES:
+    - Zone 1 (Back-Left): Near the left "399" sign and rear shelves.
+    - Zone 2 (Back-Right): Near the right "399" sign and digital clock.
+    - Zone 3 (Front-Left): Near the "799" sign and circular white table.
+    - Zone 4 (Front-Right): Near the ROCIA wall rack and right foreground.
 
-    Zone 1 (Background Left): The area containing the back-left shelves and the "Everything from 399" sign on the left.
+    OUTPUT FORMAT:
 
-    Zone 2 (Background Right): The area containing the back-right shelves, the "Everything from 399" sign on the right, and the clock/timestamp area.
+    QUADRANT HEADCOUNT
+    - Zone 1: [Count] | Zone 2: [Count] | Zone 3: [Count] | Zone 4: [Count]
 
-    Zone 3 (Foreground Left): The area around the Circular White Display Table and the "Everything from 799" sign at the bottom-left.
+    DETAILED STAFF AUDIT
+    [Staff ID (e.g., Staff A)]
+    - Location: [Exact landmark + distance, e.g., "1 meter behind the circular table"]
+    - Unique Clothing Markers: [Describe one thing that makes this person different from others, e.g., "White soles on shoes," "Watch on left wrist," or "Tucked-in shirt"]
+    - Detailed Hand Analysis: [Describe the exact position of both hands. If holding an object, describe its shape/color. If holding a phone, state: "VIOLATION: Rectangular device in hand"]
+    - Specific Activity: [Be precise: "Talking to staff member B," "Looking at floor," or "Directly assisting a customer"]
 
-    Zone 4 (Foreground Right): The open floor area on the right and the Large "ROCIA" Wall Rack on the far right.
+    SECURITY & OPERATIONS CHECK
+    - STAFF CROWDING: [List specific Staff IDs grouped together and their location]
+    - PHONE USAGE VIOLATIONS: [List Staff ID and specific visual evidence found]
+    - FLOOR & CLEANLINESS: [Shoes/trash/hazards found]
 
-    3. STAFF IDENTIFICATION RULE
-    Staff: Any person wearing a BLACK SHIRT or BLACK TOP.
-
-    (ID cards are NOT required for identification in this audit. If they wear black, they are treated as staff).
-
-    4. VIOLATION DEFINITIONS
-    Crowding/Loitering Violation: Flag this if two or more staff members (people in black) are standing close together in a group.
-
-    Phone Usage Violation: Only flag if a rectangular device or screen glow is physically visible in a staff member's hand. Do not guess based on a bent arm.
-
-    Floor Violation: Any shoes, trash, or boxes left on the walking floor.
-
-    OUTPUT FORMAT
-    QUADRANT HEADCOUNT (Validation)
-
-    Zone A (Top-Left): [Number of people]
-
-    Zone B (Top-Right): [Number of people]
-
-    Zone C (Bottom-Left): [Number of people]
-
-    Zone D (Bottom-Right): [Number of people]
-
-    TOTAL PEOPLE DETECTED: [Total count]
-
-    CCTV SCAN SUMMARY
-
-    Timestamp (from frame): [Extract Date & Time]
-
-    Total Staff (Black Shirts): [Count]
-
-    Total Customers: [Count of people NOT in black]
-
-    DETAILED STAFF AUDIT (Analyze every person in a black shirt found in the zones above)
-
-    [Staff A]
-
-    Location: [Zone + Specific landmark, describe surroundings e.g., "Zone C, near the 799 rack, near the x color shirt customer,etc."]
-
-    Clothing Detail: [Shirt type, Pants color, Shoe color , don't assume it if you can't see it clearly mention "Not clearly Visible"]
-
-    Hand Analysis: [Describe what is in their hands. State "Empty" or "No device visible" if no phone is seen.]
-
-    Activity: [describe activity e.g., Standing alone, talking to a customer, or part of a staff crowd]
-
-    (Repeat for all Staff A, B, C...)
-
-    SECURITY & OPERATIONS VIOLATIONS
-
-    STAFF CROWDING: [YES/NO] - (List the Staff IDs involved and their location if 2 or more are grouped together).
-
-    PHONE USAGE: [List specific Staff ID and visual proof. If none, write "None detected."]
-
-    FLOOR & CLEANLINESS: [Describe any shoes or waste on the floor].
-
-    OVERALL SUMMARY: [Provide a professional summary of staff count, crowding status, and store neatness.]
+    OVERALL SUMMARY:
+    [Summarize the specific violations found. Do not use generic phrases.]

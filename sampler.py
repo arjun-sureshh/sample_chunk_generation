@@ -36,7 +36,7 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
 
             if frame_id % interval == 0:
                 # Resize BEFORE storing or saving
-                frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_AREA)
+                frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_CUBIC)
                 sampled_frames.append(frame)
                 frame_name= os.path.join(frame_dir, f"frame_{frame_id}.jpg")
                 cv2.imwrite(frame_name, frame)
