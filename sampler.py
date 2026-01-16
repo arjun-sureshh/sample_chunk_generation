@@ -1,9 +1,13 @@
 import os
 import cv2
 import queue  
+from config import RESIZE
+
+h = RESIZE["height"]
+w = RESIZE["width"]
 
 
-def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_per_second):
+def get_sampled_frames(chunk_queue: queue.Queue, yolo_queue: queue.Queue, frames_per_second):
     
     while True:
         chunk = chunk_queue.get()
@@ -32,6 +36,7 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
                 break
 
             if frame_id % interval == 0:
+                frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_AREA)
                 sampled_frames.append(frame)
                 frame_name= os.path.join(frame_dir, f"frame_{frame_id}.jpg")
                 cv2.imwrite(frame_name, frame)
@@ -43,7 +48,7 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
 
         cap.release()
 
-        vlm_queue.put({
+        yolo_queue.put({
             "chunk_id": chunk["chunk_id"],
             "chunk_path": chunk["chunk_path"],
             "video_path": chunk["video_path"],

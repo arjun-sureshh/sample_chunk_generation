@@ -1,10 +1,9 @@
 import yaml
 
-with open("config.yaml", "r") as f:
+with open("config.yaml") as f:
     CONFIG = yaml.safe_load(f)
 
 VIDEO = CONFIG["video"]
-MODEL = CONFIG["model"]
 PATHS = CONFIG["paths"]
-VLM = CONFIG["vlm"]
+MODEL = CONFIG["yolo"]
 RESIZE = CONFIG["resize"]

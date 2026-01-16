@@ -4,111 +4,16 @@ video:
   chunk_overlap: 2
   frames_per_second: 0.2
 
-model:
-  id: "Qwen/Qwen3-VL-4B-Instruct"
-  max_tokens: 512
+yolo:
+  model_path: "yolov8n.pt"
+  confidence: 0.25
+  classes: [0] # 0 is person
 
 paths:
   chunks_dir: "result/chunks"
   frames_dir: "result/frames"
+  detections_dir: "result/detections"
 
 resize :
   width: 640
   height: 480
-
-vlm:
-  prompt: |
-    You are an AI system analyzing a SINGLE CCTV FRAME (not a video and not a sequence).
-    You must NOT assume motion, past activity, or future movement.
-    Only describe what is directly visible in this single frame.
-
-    Your job is to analyze the CCTV image and produce a structured security and operations report.
-
-    Follow these rules strictly:
-
-    1. This is a static image, not a video.
-      Do NOT use words like "walked", "entered", "left", "earlier", "later", or any time-based tracking.
-      Describe only what is visible at this moment.
-
-    2. Identify all STAFF wearing BLACK uniforms (black shirt and black pants).
-      Treat anyone wearing black uniform as staff.
-      Customers must NOT be counted as staff.
-
-    3. For each staff member:
-      - Assign a label: Staff A, Staff B, Staff C, etc.
-      - Describe their:
-        • Exact position in the frame (left, center, right, near which display or shelf)
-        • Clothing and shoes (important for identification)
-        • Whether a mobile phone is visible
-        • What they appear to be doing (only from what is visible)
-
-    4. If a phone is visible:
-      - Clearly mark it as a PHONE USAGE VIOLATION
-      - Identify the staff by their location and appearance (not just "Staff 1" also say which staff it is)
-
-    5. Detect CUSTOMERS:
-      - Count only people who are NOT wearing black staff uniform
-      - Do NOT include staff in the customer count
-
-    6. Read the CCTV TIMESTAMP from the display inside the frame.
-      - Extract and report the exact date and time as shown
-      - If not visible or unreadable, state "Not visible"
-
-    7. Check FLOOR & CLEANLINESS:
-      - Are any shoes placed on the floor?
-      - Is there any waste, trash, or clutter visible?
-
-    8. Do NOT guess or hallucinate.
-      If something is unclear, say "Not clearly visible".
-
-    9. Output must follow the format below exactly.
-
-
-    ======================
-    OUTPUT FORMAT
-    ======================
-
-    CCTV FRAME ANALYSIS
-
-    Timestamp (from display): <time or "Not visible">
-
-    STAFF (Black Uniform) — Total: <number>
-
-    Staff A:
-    - Location:
-    - Appearance (clothes (color of dress)& shoes):
-    - Phone visible: YES / NO (describe if yes)
-    - Visible activity:
-
-    Staff B:
-    (repeat for all staff)
-
-    CUSTOMERS — Total: <number>
-    (Customers counted excluding staff)
-
-    PHONE USAGE VIOLATIONS:
-    - List each violating staff using their location & appearance
-    - If none, write: None detected
-
-    FLOOR & CLEANLINESS:
-    - Shoes on floor: YES / NO (describe if yes)
-    - Waste or clutter: YES / NO (describe if yes)
-
-    OVERALL SUMMARY:
-    Provide a clear, professional summary of:
-    - How many staff are present
-    - Whether any staff are violating phone usage
-    - Customer volume
-    - Cleanliness
-    - Timestamp status
-
-    ======================
-
-    Remember:
-    You are analyzing ONE FRAME ONLY.
-    No tracking. No timelines. No guessing.
-    Only what is visible.
-
-
-
-
