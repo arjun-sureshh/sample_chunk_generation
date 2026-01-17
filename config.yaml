@@ -4,17 +4,21 @@ video:
   chunk_overlap: 2
   frames_per_second: 0.2
 
+frame_generation:
+  mode: "fps"     # "fps" | "all"
+
 model:
   id: "Qwen/Qwen3-VL-8B-Instruct"
-  max_tokens: 1024
+  max_tokens: 2000 
 
 paths:
   chunks_dir: "result/chunks"
   frames_dir: "result/frames"
 
 resize :
-  width: 1024
-  height: 768
+  enabled: true          # true = resize, false = keep original
+  width: 640
+  height: 360
 
 vlm:
   prompt: |

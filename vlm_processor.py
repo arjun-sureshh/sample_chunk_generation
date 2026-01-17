@@ -47,7 +47,10 @@ def analyze_frame(frame_path):
     """
 
     img = cv2.imread(frame_path)
-    img = cv2.resize(img, (w, h))
+
+    if img is None:
+        raise ValueError(f"Failed to read image {frame_path}")
+    
     img = Image.fromarray(img[:, :, ::-1])  # BGR → RGB
 
     messages = [

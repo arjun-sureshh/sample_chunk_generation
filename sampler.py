@@ -1,10 +1,11 @@
 import os
 import cv2
 import queue  
-from config import RESIZE
+from config import FRAME_GENERATION, RESIZE
 
 h = RESIZE["height"]
 w = RESIZE["width"]
+mode = FRAME_GENERATION["mode"]
 
 def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_per_second):
     
@@ -16,11 +17,18 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
         video_path = chunk["chunk_path"]
         cap = cv2.VideoCapture(video_path)
         fps = cap.get(cv2.CAP_PROP_FPS)
-        print(f"sampler.py fps:{fps}")
+        print(f"sampler.py Video FPS::{fps}")
 
-        interval = max(int(fps / frames_per_second), 1)
+        if mode == "fps":
+            interval = max(int(fps / frames_per_second), 1)
+            print(f"[SAMPLER] Mode: FPS | Interval: {interval}")
 
-        print(f"sampler.py interval:{interval}")
+        elif mode == "all":
+            interval = 1
+            print(f"[SAMPLER] Mode: ALL | Interval: {interval}")
+
+        else:
+            raise ValueError(f"Unknown frame generation mode: {mode}")
 
         sampled_frames = []
         frame_names = []
@@ -36,7 +44,9 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
 
             if frame_id % interval == 0:
                 # Resize BEFORE storing or saving
-                frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_CUBIC)
+                if RESIZE["enabled"]:
+                    frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_CUBIC)
+
                 sampled_frames.append(frame)
                 frame_name= os.path.join(frame_dir, f"frame_{frame_id}.jpg")
                 cv2.imwrite(frame_name, frame)
