@@ -5,7 +5,7 @@ video:
   frames_per_second: 0.2
 
 frame_generation:
-  mode: "fps"     # "fps" | "all"
+  mode: "all"     # "fps" | "all"
 
 model:
   id: "Qwen/Qwen3-VL-8B-Instruct"
