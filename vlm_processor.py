@@ -39,6 +39,22 @@ model = AutoModelForVision2Seq.from_pretrained(
 model.eval()
 print("[VLM] Model loaded successfully")
 
+# ====================== analyze evry person in the frame =======================
+def analyze_person(image_path, person_id):
+    prompt = f"""
+    This image is PERSON ID {person_id} from a retail CCTV frame.
+
+    Answer strictly in JSON:
+    {{
+      "person_id": {person_id},
+      "is_staff": true/false,
+      "phone_visible": true/false,
+      "evidence": "short explanation"
+    }}
+    """
+    return analyze_frame(image_path)
+
+
 # ========================
 def analyze_frame(frame_path):
     """
@@ -46,7 +62,9 @@ def analyze_frame(frame_path):
     """
 
     img = cv2.imread(frame_path)
-    img = cv2.resize(img, (w, h))
+    if img is None:
+        raise ValueError(f"Failed to read image {frame_path}")
+    
     img = Image.fromarray(img[:, :, ::-1])  # BGR → RGB
 
     messages = [

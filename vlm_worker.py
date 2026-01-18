@@ -1,5 +1,8 @@
 import os
 from vlm_processor import analyze_frame
+from detector import detect_people
+from drawer import draw_boxes
+import cv2
 
 def vlm_worker(vlm_queue):
     print("[VLM] Worker started")
@@ -21,6 +24,12 @@ def vlm_worker(vlm_queue):
         for frame_path in frame_names:
             try:
                 print(f"[VLM] Analyzing {frame_path}")
+                frame = cv2.imread(frame_path)
+                detections = detect_people(frame)
+
+                boxed = draw_boxes(frame, detections)
+                boxed_path = frame_path.replace(".jpg", "_boxed.jpg")
+                cv2.imwrite(boxed_path, boxed)
 
                 summary = analyze_frame(frame_path)
 

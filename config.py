@@ -8,3 +8,4 @@ MODEL = CONFIG["model"]
 PATHS = CONFIG["paths"]
 VLM = CONFIG["vlm"]
 RESIZE = CONFIG["resize"]
+FRAME_GENERATION = CONFIG.get("frame_generation", {"mode": "fps"})
