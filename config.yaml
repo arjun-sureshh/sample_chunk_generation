@@ -16,7 +16,7 @@ paths:
   frames_dir: "result/frames"
 
 resize :
-  enabled: true          # true = resize, false = keep original
+  enabled: false          # true = resize, false = keep original
   width: 640
   height: 360
 
