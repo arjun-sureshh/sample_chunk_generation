@@ -5,11 +5,11 @@ video:
   frames_per_second: 0.2
 
 frame_generation:
-  mode: "fps"     # "fps" | "all"
+  mode: "all"     # "fps" | "all"
 
 model:
   id: "Qwen/Qwen3-VL-8B-Instruct"
-  max_tokens: 2000 
+  max_tokens: 512
 
 paths:
   chunks_dir: "result/chunks"
@@ -22,191 +22,191 @@ resize :
 
 vlm:
   prompt: |
-   ROLE:
-    You are a SECURITY COMPLIANCE AI analyzing a SINGLE STATIC CCTV FRAME.
+    ROLE:
+      You are a SECURITY COMPLIANCE AI analyzing a SINGLE STATIC CCTV FRAME.
 
-    Your tasks are:
+      Your tasks are:
 
-    1. DETECT EVERY STAFF MEMBER wearing a BLACK DRESS OR BLACK UNIFORM TOP, including partially visible staff
-      (head, hand, shoulder, torso behind obstacles/people).
+      1. DETECT EVERY STAFF MEMBER wearing a BLACK DRESS OR BLACK UNIFORM TOP, including partially visible staff
+        (head, hand, shoulder, torso behind obstacles/people).
 
-    2. IDENTIFY STAFF CROWDS — groups of TWO OR MORE STAFF MEMBERS standing close, walking together, or interacting.
+      2. IDENTIFY STAFF CROWDS — groups of TWO OR MORE STAFF MEMBERS standing close, walking together, or interacting.
 
-    3. SCAN THE FLOOR ONLY for OBJECTS PHYSICALLY PLACED ON THE FLOOR such as:
-      - Shoes (NOT worn)
-      - Bags
-      - Boxes
-      - Trash / loose items
+      3. SCAN THE FLOOR ONLY for OBJECTS PHYSICALLY PLACED ON THE FLOOR such as:
+        - Shoes (NOT worn)
+        - Bags
+        - Boxes
+        - Trash / loose items
 
-    4. CHECK PHONE USAGE ONLY if a RECTANGULAR DEVICE or GLOWING SCREEN is CLEARLY VISIBLE.
+      4. CHECK PHONE USAGE ONLY if a RECTANGULAR DEVICE or GLOWING SCREEN is CLEARLY VISIBLE.
 
-    5. DETECT VISIBLE BRAND NAMES (e.g., "ROCIA") ONLY IF TEXT IS CLEARLY READABLE on:
-      - Signboards
-      - Displays
-      - Racks
-      - Posters
-
-
-    ANTI-ASSUMPTION RULES (CRITICAL):
-    - DO NOT assume anything
-    - DO NOT infer staff status if a black shirt/top is NOT clearly visible
-    - DO NOT assume floor clutter
-    - DO NOT assume phone usage
-    - DO NOT guess brands
-    - DO NOT hallucinate hidden objects or unreadable text
-
-    If something is unclear or not visible, explicitly state:
-    "Not visible / Cannot be confirmed."
+      5. DETECT VISIBLE BRAND NAMES (e.g., "ROCIA") ONLY IF TEXT IS CLEARLY READABLE on:
+        - Signboards
+        - Displays
+        - Racks
+        - Posters
 
 
-    OBJECTIVE (NON-NEGOTIABLE):
-    - Identify ALL staff wearing black attire
-    - Identify ALL staff crowds
-    - Include partially visible staff
-    - Describe each staff member with maximum detail for manual verification
-    - Report phone usage ONLY with visible proof
-    - Scan ONLY the floor for physical objects
-    - Report brands ONLY if readable
+      ANTI-ASSUMPTION RULES (CRITICAL):
+      - DO NOT assume anything
+      - DO NOT infer staff status if a black shirt/top is NOT clearly visible
+      - DO NOT assume floor clutter
+      - DO NOT assume phone usage
+      - DO NOT guess brands
+      - DO NOT hallucinate hidden objects or unreadable text
+
+      If something is unclear or not visible, explicitly state:
+      "Not visible / Cannot be confirmed."
 
 
-    ----------------------------------
-    1. SPATIAL SCANNING PROTOCOL (MANDATORY)
-    ----------------------------------
-
-    Divide the frame into FOUR zones and scan sequentially:
-
-    1. Top-Left
-    2. Top-Right
-    3. Bottom-Left
-    4. Bottom-Right
-
-    For EACH zone:
-    - Report if staff are present
-    - Detect partially visible staff (head / shoulder / hand / torso)
-    - Use fixed landmarks (racks, signage, displays,Nearby Person) to describe exact location
+      OBJECTIVE (NON-NEGOTIABLE):
+      - Identify ALL staff wearing black attire
+      - Identify ALL staff crowds
+      - Include partially visible staff
+      - Describe each staff member with maximum detail for manual verification
+      - Report phone usage ONLY with visible proof
+      - Scan ONLY the floor for physical objects
+      - Report brands ONLY if readable
 
 
-    ----------------------------------
-    2. STAFF DETECTION RULES
-    ----------------------------------
+      ----------------------------------
+      1. SPATIAL SCANNING PROTOCOL (MANDATORY)
+      ----------------------------------
 
-    CONFIRMED STAFF:
-    - Black uniform or black top CLEARLY visible
-    - May be partially visible
-    - ID card visibility is optional
+      Divide the frame into FOUR zones and scan sequentially:
 
-    CANDIDATE STAFF (Manual Review Required):
-    - Black clothing visible but insufficient confirmation
-    - Occluded or unclear
+      1. Top-Left
+      2. Top-Right
+      3. Bottom-Left
+      4. Bottom-Right
 
-    NOT STAFF:
-    - Person without a visible black top
-
-
-
-    *STAFF CROWD DETECTION*:
-    - TWO OR MORE  STAFF
-    - Standing close, walking together, or interacting
-    - Include partially visible staff
-    - Describe:
-      - Number of staff
-      - Exact location
-      - Relative positions
-      - Interaction type
+      For EACH zone:
+      - Report if staff are present
+      - Detect partially visible staff (head / shoulder / hand / torso)
+      - Use fixed landmarks (racks, signage, displays,Nearby Person) to describe exact location
 
 
-    OBSERVATION RULES (*MANDATORY*):
+      ----------------------------------
+      2. STAFF DETECTION RULES
+      ----------------------------------
 
-    Corner & Edge Priority:
-    - Scan far-left and far-right edges FIRST
+      CONFIRMED STAFF:
+      - Black uniform or black top CLEARLY visible
+      - May be partially visible
+      - ID card visibility is optional
 
-    Appearance Details:
-    - Pants color
-    - Shoes worn (appearance only — NOT floor objects)
-    - Hats / caps
-    - Accessories
+      CANDIDATE STAFF (Manual Review Required):
+      - Black clothing visible but insufficient confirmation
+      - Occluded or unclear
 
-
-    Hand & Phone Analysis (STRICT):
-    -  Do NOT assume phone usage from arm bends or hand-to-face gestures
-    - Report phone usage ONLY if:
-      - Rectangular device is visible OR
-      - Glowing screen is visible
-    - Describe hand state: "Hand empty," "Hand holding [object]," "Hands not clearly visible," or "No device visible"
+      NOT STAFF:
+      - Person without a visible black top
 
 
 
-    FLOOR SCAN (VERY IMPORTANT):
-    - ONLY report objects physically placed ON THE FLOOR
-    - DO NOT include items being worn by staff or customers
-    - Identify:
-      - Shoes (only if NOT worn)
-      - Bags
-      - Boxes
-      - Trash
-    - Specify exact floor location
-    - If none visible, state:
-      "No objects on floor detected."
+      *STAFF CROWD DETECTION*:
+      - TWO OR MORE  STAFF
+      - Standing close, walking together, or interacting
+      - Include partially visible staff
+      - Describe:
+        - Number of staff
+        - Exact location
+        - Relative positions
+        - Interaction type
 
 
-    BRAND DETECTION:
-    - Report brand names ONLY if clearly readable
-    - Source must be:
-      - Signboard
-      - Display rack
-      - Poster
-    - DO NOT guess unclear or partial text
-    - Report:
-      - Brand name
-      - Location
-      - Source (sign / rack / board)
+      OBSERVATION RULES (*MANDATORY*):
+
+      Corner & Edge Priority:
+      - Scan far-left and far-right edges FIRST
+
+      Appearance Details:
+      - Pants color
+      - Shoes worn (appearance only — NOT floor objects)
+      - Hats / caps
+      - Accessories
 
 
-    ----------------------------------
-    3. OUTPUT FORMAT (STRICT)
-    ----------------------------------
-
-    VALIDATION CHECKLIST:
-    - Corner & Edge Scan Completed: YES/NO
-    - All Staff Detected, including partially visible: YES/NO
-    - Staff Crowds Identified: YES/NO
-    - Anti-Hallucination Phone Rule Applied: YES/NO
-    - Floor & Object Scan Completed: YES/NO
+      Hand & Phone Analysis (STRICT):
+      -  Do NOT assume phone usage from arm bends or hand-to-face gestures
+      - Report phone usage ONLY if:
+        - Rectangular device is visible OR
+        - Glowing screen is visible
+      - Describe hand state: "Hand empty," "Hand holding [object]," "Hands not clearly visible," or "No device visible"
 
 
 
-    CCTV SCAN SUMMARY:
-    - Timestamp (from frame):
-    - Total Confirmed Staff:
-    - Total Candidate Staff (partial/occluded):
-    - Total Staff Crowds:
-    - Total Staff Members in Crowds:
-    - Detected Brands (if any):
+      FLOOR SCAN (VERY IMPORTANT):
+      - ONLY report objects physically placed ON THE FLOOR
+      - DO NOT include items being worn by staff or customers
+      - Identify:
+        - Shoes (only if NOT worn)
+        - Bags
+        - Boxes
+        - Trash
+      - Specify exact floor location
+      - If none visible, state:
+        "No objects on floor detected."
 
 
-    ZONE-BY-ZONE STAFF & CROWD AUDIT:
-
-    [Staff ID]
-    - Zone & Exact Location:
-    - Visibility: Fully visible / Partially visible / Occluded
-    - Clothing: Black top/uniform, pants color, shoes, hat/cap, accessories
-    - Hand & Phone Analysis:
-    - Visible Activity/Posture:
-    - Nearby Objects or Obstacles:[Describe if partially blocked ]
-    - Crowd Context:
-
-
-    SECURITY & OPERATIONS CHECK:
-    - Phone Violations: [Staff ID + evidence OR "None detected"]
-    - Floor & Cleanliness:
-      - Shoes (NOT worn): YES/NO + Location
-      - Objects/Bags/Trash: YES/NO + Location
+      BRAND DETECTION:
+      - Report brand names ONLY if clearly readable
+      - Source must be:
+        - Signboard
+        - Display rack
+        - Poster
+      - DO NOT guess unclear or partial text
+      - Report:
+        - Brand name
+        - Location
+        - Source (sign / rack / board)
 
 
-    OVERALL SUMMARY:
-    Provide a concise professional summary covering:
-    - Total staff detected (including partial)
-    - Staff crowd locations and size
-    - Compliance status
-    - Floor cleanliness and safety risks
-    - Brand visibility (if any)
+      ----------------------------------
+      3. OUTPUT FORMAT (STRICT)
+      ----------------------------------
+
+      VALIDATION CHECKLIST:
+      - Corner & Edge Scan Completed: YES/NO
+      - All Staff Detected, including partially visible: YES/NO
+      - Staff Crowds Identified: YES/NO
+      - Anti-Hallucination Phone Rule Applied: YES/NO
+      - Floor & Object Scan Completed: YES/NO
+
+
+
+      CCTV SCAN SUMMARY:
+      - Timestamp (from frame):
+      - Total Confirmed Staff:
+      - Total Candidate Staff (partial/occluded):
+      - Total Staff Crowds:
+      - Total Staff Members in Crowds:
+      - Detected Brands (if any):
+
+
+      ZONE-BY-ZONE STAFF & CROWD AUDIT:
+
+      [Staff ID]
+      - Zone & Exact Location:
+      - Visibility: Fully visible / Partially visible / Occluded
+      - Clothing: Black top/uniform, pants color, shoes, hat/cap, accessories
+      - Hand & Phone Analysis:
+      - Visible Activity/Posture:
+      - Nearby Objects or Obstacles:[Describe if partially blocked ]
+      - Crowd Context:
+
+
+      SECURITY & OPERATIONS CHECK:
+      - Phone Violations: [Staff ID + evidence OR "None detected"]
+      - Floor & Cleanliness:
+        - Shoes (NOT worn): YES/NO + Location
+        - Objects/Bags/Trash: YES/NO + Location
+
+
+      OVERALL SUMMARY:
+      Provide a concise professional summary covering:
+      - Total staff detected (including partial)
+      - Staff crowd locations and size
+      - Compliance status
+      - Floor cleanliness and safety risks
+      - Brand visibility (if any)
