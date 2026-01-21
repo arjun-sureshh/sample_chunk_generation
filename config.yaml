@@ -5,7 +5,7 @@ video:
   frames_per_second: 0.2
 
 frame_generation:
-  mode: "all"     # "fps" | "all"
+  mode: "fps"     # "fps" | "all"
 
 model:
   id: "Qwen/Qwen3-VL-8B-Instruct"
@@ -16,7 +16,7 @@ paths:
   frames_dir: "result/frames"
 
 resize :
-  enabled: false          # true = resize, false = keep original
+  enabled: true          # true = resize, false = keep original
   width: 640
   height: 360
 
