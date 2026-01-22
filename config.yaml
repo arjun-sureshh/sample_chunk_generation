@@ -9,14 +9,14 @@ frame_generation:
 
 model:
   id: "Qwen/Qwen3-VL-8B-Instruct"
-  max_tokens: 512
+  max_tokens: 1000
 
 paths:
   chunks_dir: "result/chunks"
   frames_dir: "result/frames"
 
 resize :
-  enabled: true          # true = resize, false = keep original
+  enabled: false          # true = resize, false = keep original
   width: 640
   height: 360
 
@@ -74,10 +74,10 @@ vlm:
       ----------------------------------
 
       The image contains fixed colored zones:
-      - RED zone: Top-Left
-      - GREEN zone: Top-Right
-      - BLUE zone: Bottom-Left
-      - YELLOW zone: Bottom-Right
+      - RED zone: top-left area bounded by red lines
+      - GREEN zone: top-right area bounded by green lines
+      - BLUE zone: bottom-left area bounded by blue lines
+      - YELLOW zone: bottom-right area bounded by yellow lines
 
       Use these zones strictly when describing staff locations.
 

@@ -20,63 +20,33 @@ def clean_directory(path: str):
 
 
 # OpenCV uses BGR format
+import cv2
+
 COLOR_MAP = {
     "RED":    (0, 0, 255),
     "GREEN":  (0, 255, 0),
     "BLUE":   (255, 0, 0),
-    "YELLOW": (0, 255, 255)
+    "YELLOW": (0, 255, 255),
+    "WHITE":  (255, 255, 255)
 }
 
 def draw_zones(frame):
     """
-    Zone-safe overlay:
-    - Border-first visualization
-    - Ultra-low transparency fill
-    - Preserves small object visibility (phones, hands, text)
+    Grid-based zone boundaries:
+    - Full visual separation
+    - Zero overlap
+    - Model-safe
     """
     h, w, _ = frame.shape
+    thickness = 2
 
-    zones = [
-        ("RED",    (0, 0),        (w // 2, h // 2)),   # Top-left
-        ("GREEN",  (w // 2, 0),   (w, h // 2)),       # Top-right
-        ("BLUE",   (0, h // 2),   (w // 2, h)),       # Bottom-left
-        ("YELLOW", (w // 2, h // 2), (w, h))          # Bottom-right
-    ]
+    # Outer boundary (optional but recommended)
+    cv2.rectangle(frame, (0, 0), (w, h), COLOR_MAP["WHITE"], 1)
 
-    overlay = frame.copy()
+    # Vertical center line
+    cv2.line(frame, (w // 2, 0), (w // 2, h), COLOR_MAP["WHITE"], thickness)
 
-    # 🔒 SAFE SETTINGS (do not increase)
-    alpha = 0.08          # ultra-light tint
-    border_thickness = 2  # clear but non-intrusive
-
-    for color_name, pt1, pt2 in zones:
-        # Draw ultra-light fill (safe)
-        cv2.rectangle(
-            overlay,
-            pt1,
-            pt2,
-            COLOR_MAP[color_name],
-            thickness=-1
-        )
-
-        # Draw clear border (main visual cue)
-        cv2.rectangle(
-            frame,
-            pt1,
-            pt2,
-            COLOR_MAP[color_name],
-            thickness=border_thickness
-        )
-
-    # Blend overlay gently
-    cv2.addWeighted(
-        overlay,
-        alpha,
-        frame,
-        1 - alpha,
-        0,
-        frame
-    )
+    # Horizontal center line
+    cv2.line(frame, (0, h // 2), (w, h // 2), COLOR_MAP["WHITE"], thickness)
 
     return frame
-
