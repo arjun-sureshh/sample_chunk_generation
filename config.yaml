@@ -9,7 +9,7 @@ frame_generation:
 
 model:
   id: "Qwen/Qwen3-VL-8B-Instruct"
-  max_tokens: 1000
+  max_tokens: 900
 
 paths:
   chunks_dir: "result/chunks"
