@@ -17,7 +17,9 @@ def clean_directory(path: str):
 
 
 
-# OpenCV uses BGR, not RGB
+
+
+# OpenCV uses BGR format
 COLOR_MAP = {
     "RED":    (0, 0, 255),
     "GREEN":  (0, 255, 0),
@@ -27,25 +29,54 @@ COLOR_MAP = {
 
 def draw_zones(frame):
     """
-    Draws fixed colored zones on the frame for VLM guidance
+    Zone-safe overlay:
+    - Border-first visualization
+    - Ultra-low transparency fill
+    - Preserves small object visibility (phones, hands, text)
     """
     h, w, _ = frame.shape
 
     zones = [
-        ("RED",    (0, 0),        (w//2, h//2)),   # Top-left
-        ("GREEN",  (w//2, 0),     (w, h//2)),      # Top-right
-        ("BLUE",   (0, h//2),     (w//2, h)),      # Bottom-left
-        ("YELLOW", (w//2, h//2),  (w, h))          # Bottom-right
+        ("RED",    (0, 0),        (w // 2, h // 2)),   # Top-left
+        ("GREEN",  (w // 2, 0),   (w, h // 2)),       # Top-right
+        ("BLUE",   (0, h // 2),   (w // 2, h)),       # Bottom-left
+        ("YELLOW", (w // 2, h // 2), (w, h))          # Bottom-right
     ]
 
     overlay = frame.copy()
-    alpha = 0.25  # transparency
+
+    # 🔒 SAFE SETTINGS (do not increase)
+    alpha = 0.08          # ultra-light tint
+    border_thickness = 2  # clear but non-intrusive
 
     for color_name, pt1, pt2 in zones:
-        cv2.rectangle(overlay, pt1, pt2, COLOR_MAP[color_name], -1)
-        cv2.rectangle(frame, pt1, pt2, COLOR_MAP[color_name], 2)
+        # Draw ultra-light fill (safe)
+        cv2.rectangle(
+            overlay,
+            pt1,
+            pt2,
+            COLOR_MAP[color_name],
+            thickness=-1
+        )
 
-    # Blend overlay with original frame
-    cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0, frame)
+        # Draw clear border (main visual cue)
+        cv2.rectangle(
+            frame,
+            pt1,
+            pt2,
+            COLOR_MAP[color_name],
+            thickness=border_thickness
+        )
+
+    # Blend overlay gently
+    cv2.addWeighted(
+        overlay,
+        alpha,
+        frame,
+        1 - alpha,
+        0,
+        frame
+    )
 
     return frame
+

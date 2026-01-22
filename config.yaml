@@ -73,18 +73,19 @@ vlm:
       1. SPATIAL SCANNING PROTOCOL (MANDATORY)
       ----------------------------------
 
-      Divide the frame into FOUR zones and scan sequentially:
+      The image contains fixed colored zones:
+      - RED zone: Top-Left
+      - GREEN zone: Top-Right
+      - BLUE zone: Bottom-Left
+      - YELLOW zone: Bottom-Right
 
-      1. Top-Left
-      2. Top-Right
-      3. Bottom-Left
-      4. Bottom-Right
+      Use these zones strictly when describing staff locations.
 
       For EACH zone:
       - Report if staff are present
       - Detect partially visible staff (head / shoulder / hand / torso)
       - Use fixed landmarks (racks, signage, displays,Nearby Person) to describe exact location
-
+      - If a staff member is positioned on or across a zone border, explicitly mention ALL relevant zones.
 
       ----------------------------------
       2. STAFF DETECTION RULES
