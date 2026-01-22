@@ -2,6 +2,7 @@ import os
 import cv2
 import queue  
 from config import FRAME_GENERATION, RESIZE
+from utils import draw_zones
 
 h = RESIZE["height"]
 w = RESIZE["width"]
@@ -46,10 +47,10 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
                 # Resize BEFORE storing or saving
                 if RESIZE["enabled"]:
                     frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_CUBIC)
-
-                sampled_frames.append(frame)
+                zone_annotated_frame  = draw_zones(frame)
+                sampled_frames.append(zone_annotated_frame )
                 frame_name= os.path.join(frame_dir, f"frame_{frame_id}.jpg")
-                cv2.imwrite(frame_name, frame)
+                cv2.imwrite(frame_name, zone_annotated_frame )
                 frame_names.append(frame_name)
             # else:
             #     print(f"skipping frame {frame_id},{interval}")
