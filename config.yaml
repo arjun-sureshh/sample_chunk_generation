@@ -80,7 +80,8 @@ vlm:
       - YELLOW zone: bottom-right area bounded by yellow lines
 
       Use these zones strictly when describing staff locations.
-
+      Zone colors indicate boundary lines only; the interior content is not color-coded.
+      
       For EACH zone:
       - Report if staff are present
       - Detect partially visible staff (head / shoulder / hand / torso)

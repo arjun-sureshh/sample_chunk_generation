@@ -19,34 +19,34 @@ def clean_directory(path: str):
 
 
 
-# OpenCV uses BGR format
-import cv2
+
 
 COLOR_MAP = {
     "RED":    (0, 0, 255),
     "GREEN":  (0, 255, 0),
     "BLUE":   (255, 0, 0),
-    "YELLOW": (0, 255, 255),
-    "WHITE":  (255, 255, 255)
+    "YELLOW": (0, 255, 255)
 }
 
 def draw_zones(frame):
     """
-    Grid-based zone boundaries:
-    - Full visual separation
-    - Zero overlap
-    - Model-safe
+    Colored boundary-only zones.
+    Zero interference with detection.
+    Fully aligned with prompt.
     """
     h, w, _ = frame.shape
-    thickness = 2
+    t = 2  # thickness (do not increase)
 
-    # Outer boundary (optional but recommended)
-    cv2.rectangle(frame, (0, 0), (w, h), COLOR_MAP["WHITE"], 1)
+    # RED zone (Top-Left)
+    cv2.rectangle(frame, (0, 0), (w//2, h//2), COLOR_MAP["RED"], t)
 
-    # Vertical center line
-    cv2.line(frame, (w // 2, 0), (w // 2, h), COLOR_MAP["WHITE"], thickness)
+    # GREEN zone (Top-Right)
+    cv2.rectangle(frame, (w//2, 0), (w, h//2), COLOR_MAP["GREEN"], t)
 
-    # Horizontal center line
-    cv2.line(frame, (0, h // 2), (w, h // 2), COLOR_MAP["WHITE"], thickness)
+    # BLUE zone (Bottom-Left)
+    cv2.rectangle(frame, (0, h//2), (w//2, h), COLOR_MAP["BLUE"], t)
+
+    # YELLOW zone (Bottom-Right)
+    cv2.rectangle(frame, (w//2, h//2), (w, h), COLOR_MAP["YELLOW"], t)
 
     return frame
