@@ -4,6 +4,9 @@ video:
   chunk_overlap: 2
   frames_per_second: 0.2
 
+frame_generation:
+  mode: "fps"     # "fps" | "all" 
+
 yolo:
   model_path: "yolov8n.pt"
   confidence: 0.25
@@ -15,5 +18,16 @@ paths:
   detections_dir: "result/detections"
 
 resize :
+  enabled: false          # true = resize, false = keep original
   width: 640
-  height: 480
+  height: 360
+
+zone:
+  x1: 0.35
+  y1: 0.05
+  x2: 0.70
+  y2: 0.50
+  color: [0, 0, 255]
+  thickness: 3
+  iou_threshold: 0.01
+  

@@ -1,11 +1,11 @@
 import os
 import cv2
 import queue  
-from config import RESIZE
+from config import RESIZE, FRAME_GENERATION
 
 h = RESIZE["height"]
 w = RESIZE["width"]
-
+mode = FRAME_GENERATION["mode"]
 
 def get_sampled_frames(chunk_queue: queue.Queue, yolo_queue: queue.Queue, frames_per_second):
     
@@ -19,9 +19,12 @@ def get_sampled_frames(chunk_queue: queue.Queue, yolo_queue: queue.Queue, frames
         fps = cap.get(cv2.CAP_PROP_FPS)
         print(f"sampler.py fps:{fps}")
 
-        interval = max(int(fps / frames_per_second), 1)
+        if mode == "fps":
+            interval = max(int(fps / frames_per_second), 1)
+            print(f"sampler.py interval:{interval}")
 
-        print(f"sampler.py interval:{interval}")
+        elif mode == "all":
+            interval = 1
 
         sampled_frames = []
         frame_names = []
@@ -36,7 +39,8 @@ def get_sampled_frames(chunk_queue: queue.Queue, yolo_queue: queue.Queue, frames
                 break
 
             if frame_id % interval == 0:
-                frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_AREA)
+                if RESIZE["enabled"]:
+                    frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_CUBIC)
                 sampled_frames.append(frame)
                 frame_name= os.path.join(frame_dir, f"frame_{frame_id}.jpg")
                 cv2.imwrite(frame_name, frame)
