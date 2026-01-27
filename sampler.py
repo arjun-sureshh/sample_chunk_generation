@@ -47,10 +47,10 @@ def get_sampled_frames(chunk_queue: queue.Queue, vlm_queue: queue.Queue, frames_
                 # Resize BEFORE storing or saving
                 if RESIZE["enabled"]:
                     frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_CUBIC)
-                zone_annotated_frame  = draw_zones(frame)
-                sampled_frames.append(zone_annotated_frame )
+                # frame  = draw_zones(frame)
+                sampled_frames.append(frame)
                 frame_name= os.path.join(frame_dir, f"frame_{frame_id}.jpg")
-                cv2.imwrite(frame_name, zone_annotated_frame )
+                cv2.imwrite(frame_name, frame )
                 frame_names.append(frame_name)
             # else:
             #     print(f"skipping frame {frame_id},{interval}")

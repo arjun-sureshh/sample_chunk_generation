@@ -29,13 +29,9 @@ COLOR_MAP = {
 }
 
 def draw_zones(frame):
-    """
-    Colored boundary-only zones.
-    Zero interference with detection.
-    Fully aligned with prompt.
-    """
+    
     h, w, _ = frame.shape
-    t = 2  # thickness (do not increase)
+    t = 2  # thickness 
 
     # RED zone (Top-Left)
     cv2.rectangle(frame, (0, 0), (w//2, h//2), COLOR_MAP["RED"], t)
