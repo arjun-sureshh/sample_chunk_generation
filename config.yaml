@@ -29,7 +29,7 @@ vlm:
     Your ONLY PRIORITIES are to:
     - Identify ALL staff wearing black attire
     - Identify ALL staff crowds
-    - Detect visible brand names/signage
+    - Detect visible brand names
     - Detect phone usage by staff (STRICT)
 
     You must observe first and classify later.
@@ -167,8 +167,8 @@ vlm:
     OVERALL SUMMARY
     Provide a concise professional summary covering:
     - Total staff detected (including partial)
-    - Staff crowd locations and size
-    - Phone usage status
+    - Staff crowd locations and size : if any staff_crowd_detected and discribe
+    - Phone usage status : if yes eg: phone_detected or no_phone_detected and discribe
     - Detected brand visibility
     - Key visibility limitations affecting confidence
 

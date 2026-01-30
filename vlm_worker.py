@@ -1,5 +1,6 @@
 import os
 from vlm_processor import analyze_frame
+import json 
 
 def vlm_worker(vlm_queue):
     print("[VLM] Worker started")
@@ -24,13 +25,20 @@ def vlm_worker(vlm_queue):
 
                 summary = analyze_frame(frame_path)
 
-                txt_path = frame_path.replace(".jpg", ".txt")
-
-                with open(txt_path, "w", encoding="utf-8") as f:
-                    f.write(summary)
-                    f.write("\n" + str(fps))
-                print(f"summary:{summary}")
-                print(f"[VLM] Saved → {txt_path}")
+                json_path = frame_path.replace(".jpg", ".json")
+                data = {
+                        "chunk_id": chunk_id,
+                        "frame_name": os.path.basename(frame_path),
+                        "fps": item["fps"],
+                        "analysis": {
+                            "phone_usage_detected": "phone_detected" in summary.lower(),
+                            "staff_detected": "Staff ID 1" in summary.lower(),
+                            "crowd_detected": "staff_crowd_detected" in summary.lower()
+                        },
+                        "raw_summary": summary
+                    }
+                with open(json_path, "w", encoding="utf-8") as f:
+                    json.dump(data, f, indent=4)
 
             except Exception as e:
                 print(f"[VLM ERROR] {frame_path}: {e}")
