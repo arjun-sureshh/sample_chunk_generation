@@ -24,7 +24,10 @@ def vlm_worker(vlm_queue):
                 print(f"[VLM] Analyzing {frame_path}")
 
                 summary = analyze_frame(frame_path)
-
+                txt_path = frame_path.replace(".jpg", ".txt")
+                with open(txt_path, "w", encoding="utf-8") as f:
+                        f.write(summary)
+                        f.write("\n" + str(fps))
                 json_path = frame_path.replace(".jpg", ".json")
                 data = {
                         "chunk_id": chunk_id,
@@ -39,6 +42,6 @@ def vlm_worker(vlm_queue):
                     }
                 with open(json_path, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=4)
-
+                    print(summary)
             except Exception as e:
                 print(f"[VLM ERROR] {frame_path}: {e}")
