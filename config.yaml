@@ -1,5 +1,5 @@
 video:
-  path: "videos/LifeStyle-Footage-2min.mp4"
+  path: "videos/lifystyleflore_hygiene.mp4"
   chunk_duration: 30
   chunk_overlap: 2
   frames_per_second: 0.2
@@ -100,19 +100,31 @@ vlm:
     NOT STAFF
     - No visible black top/uniform
 
-    ================================================
+    ================================
     STEP 2 — STAFF CROWD DETECTION
-    ================================================
+    ================================
+
     A STAFF CROWD is:
     - TWO OR MORE CONFIRMED or CANDIDATE STAFF
     - Standing close, walking together, or interacting
     - Include partially visible staff
 
-    For each detected crowd, record:
-    - Number of staff
+    IMPORTANT:
+    - You may detect ZERO, ONE, or MULTIPLE staff crowds in a single frame
+    - Each crowd MUST be identified and reported SEPARATELY
+    - Do NOT merge distinct groups into one crowd
+    - Do NOT limit detection to a single crowd
+
+    For EACH detected staff crowd, record:
+    - Crowd ID (Staff Crowd ID 1, Staff Crowd ID 2, …)
+    - Number of staff in the crowd
     - Exact location
+    - Zones involved
     - Relative positions
     - Interaction type (if visible)
+
+    If NO staff crowds are visible, explicitly state:
+    “No staff crowds detected.”
 
     ================================================
     STEP 3 — HAND & PHONE ANALYSIS (STRICT)
@@ -126,6 +138,65 @@ vlm:
     - “Hands not clearly visible”
 
     DO NOT assume phone usage from gestures.
+
+    ================================================
+    STEP 4 — FLOOR HYGIENE & OBJECT DETECTION (STRICT)
+    ================================================
+
+    ⚠️ IMPORTANT
+    This step is observation-based only.
+    Do NOT assume cleanliness standards or intent.
+
+    FLOOR OBJECT RULES (NON-NEGOTIABLE)
+
+    ONLY report objects that are:
+
+    Clearly resting on the floor
+
+    Not worn, not held, not attached to a person
+
+    DO NOT report:
+
+    Shoes being worn
+
+    Bags worn or carried
+
+    Objects partially inferred
+
+    Reflections or shadows
+
+    REPORTABLE FLOOR OBJECT CATEGORIES
+
+    Identify and report ONLY if clearly visible:
+
+    Footwear
+    (Shoes / sandals / slippers — only if NOT worn)
+
+    Bags
+    (Backpacks, handbags, sacks placed on floor)
+
+    Boxes / Containers
+    (Cartons, packages, crates)
+
+    Trash / Debris
+    (Paper, plastic, food waste, bottles, wrappers)
+
+    Liquid Spills
+    (Only if visibly pooled or spread on floor)
+
+    If visibility is unclear, state:
+    “Not visible / Cannot be confirmed.”
+
+    FLOOR LOCATION REQUIREMENTS
+
+    For EACH detected floor object, specify:
+
+    Zone (Top-Left / Top-Right / Bottom-Left / Bottom-Right)
+
+    Exact position
+    (e.g., near counter, aisle center, beside rack, under table)
+
+    Proximity to people (if any)
 
     ================================================
     OUTPUT FORMAT (STRICT)
@@ -163,6 +234,19 @@ vlm:
     - Interaction type:
 
     ------------------------------------------------
+
+    FLOOR HYGIENE OBSERVATION
+
+    [Floor Object ID]
+    - Object Type:
+    - Zone & Exact Floor Location:
+    - Visibility: Fully visible / Partially visible / Occluded
+    - Description: Size, color, shape (visual only)
+    - Nearby People or Obstacles:
+    - Potential Obstruction: Yes / No (visual only)
+
+    ------------------------------------------------
+
 
     OVERALL SUMMARY
     Provide a concise professional summary covering:
