@@ -1,0 +1,51 @@
+{
+  "note": "NOTE: Adjust all point coordinates to match your actual camera resolution and zone positions",
+  "camera_id": "cam_01",
+  "resolution": [1280, 720],
+  "zones": [
+    {
+      "id": "footwear_zone",
+      "label": "Footwear Section",
+      "type": "polygon",
+      "color": [0, 255, 0],
+      "points": [[100, 200], [600, 200], [600, 600], [100, 600]],
+      "use_cases": ["staff_presence", "customer_unassisted", "dwell"]
+    },
+    {
+      "id": "brand_wall",
+      "label": "Brand Wall",
+      "type": "polygon",
+      "color": [255, 165, 0],
+      "points": [[700, 100], [1200, 100], [1200, 600], [700, 600]],
+      "use_cases": ["brand_coverage", "dwell"]
+    },
+    {
+      "id": "back_store",
+      "label": "Back Store",
+      "type": "polygon",
+      "color": [0, 0, 255],
+      "points": [[400, 400], [900, 400], [900, 700], [400, 700]],
+      "use_cases": ["back_store_activity", "congestion"]
+    },
+    {
+      "id": "floor_hygiene_zone",
+      "label": "Floor Area",
+      "type": "polygon",
+      "color": [255, 0, 255],
+      "points": [[50, 500], [1230, 500], [1230, 715], [50, 715]],
+      "use_cases": ["floor_hygiene"]
+    }
+  ],
+  "lines": [
+    {
+      "id": "entrance_line",
+      "label": "Store Entrance",
+      "type": "line",
+      "start": [0, 250],
+      "end": [1280, 250],
+      "direction": "down_is_entry",
+      "color": [0, 255, 255],
+      "use_cases": ["footfall"]
+    }
+  ]
+}

@@ -1,11 +1,39 @@
 video:
-  path: "videos/lifystyleflore_hygiene.mp4"
+  path: "videos/lifestylefootage2min.mp4"
   chunk_duration: 30
   chunk_overlap: 2
   frames_per_second: 0.2
 
 frame_generation:
   mode: "fps"     # "fps" | "all"
+
+detection:
+  model: "yolov8n.pt"
+  confidence: 0.25
+  device: "cpu"
+  image_size: 1280
+
+tracking:
+  max_age: 30
+  min_hits: 3
+
+classification:
+  method: vlm_primary
+  lab_prefilter_threshold: 0.92
+  staff_uniform_lab:
+    a_min: 110
+    a_max: 150
+    b_min: 90
+    b_max: 155
+  cache_classifications: true
+  clear_stale_every_n_frames: 100
+  stats_every_n_frames: 50
+
+visualization:
+  display_video: true
+  save_video: true
+  tracked_video_dir: "result/tracked_videos"
+  annotated_frames_dir: "result/annotated"
 
 model:
   id: "Qwen/Qwen3-VL-8B-Instruct"
@@ -265,3 +293,21 @@ vlm:
     - Crowd logic applied correctly
     - Phone detection strictly evidence-based
     - No assumptions or hallucinations
+
+zones:
+  config_path: config/zones/camera_01.json
+  draw_on_frame: true
+  zone_opacity: 0.15
+
+proximity:
+  staff_customer_radius: 150
+  staff_grouping_radius: 120
+  staff_grouping_min_count: 3
+
+footfall:
+  reset_interval_seconds: 3600
+  count_exits: true
+
+person_state:
+  stale_track_timeout: 5.0
+  cleanup_every_n_frames: 100

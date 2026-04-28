@@ -1,0 +1,21 @@
+{
+  "settings_version": "0.0.6",
+  "datasets_dir": "D:\\LifeStyle_chunk-generation-nuc\\datasets",
+  "weights_dir": "D:\\LifeStyle_chunk-generation-nuc\\sample_chunk_generation\\weights",
+  "runs_dir": "D:\\LifeStyle_chunk-generation-nuc\\sample_chunk_generation\\runs",
+  "uuid": "faa3326b02341a24f5151c423f0bdce3d107551ec9b11054c34e928d67200e19",
+  "sync": true,
+  "api_key": "",
+  "openai_api_key": "",
+  "clearml": true,
+  "comet": true,
+  "dvc": true,
+  "hub": true,
+  "mlflow": true,
+  "neptune": true,
+  "raytune": true,
+  "tensorboard": false,
+  "wandb": false,
+  "vscode_msg": true,
+  "openvino_msg": true
+}
