@@ -2,6 +2,7 @@ import threading
 import queue
 from chunker import generate_chunks
 from sampler import get_sampled_frames
+from scripts.build_index import build_index
 from vlm_worker import vlm_worker
 from utils import clean_directory
 import os
@@ -17,7 +18,7 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 if HF_TOKEN is None:
     raise RuntimeError("❌ HF_TOKEN not found in .env file")
 
-print("[SYSTEM] HuggingFace token loaded")
+
 
 
 chunk_queue = queue.Queue()
@@ -25,11 +26,14 @@ vlm_queue = queue.Queue()
 
 CHUNKS_DIR = PATHS["chunks_dir"]
 FRAMES_DIR = PATHS["frames_dir"]
+JSON_DIR = PATHS["json_dir"]
 
 print("[SYSTEM] Cleaning old outputs...")
 
 clean_directory(CHUNKS_DIR)
 clean_directory(FRAMES_DIR)
+clean_directory(JSON_DIR)
+
 
 print("[SYSTEM] Output directories are fresh")
 
@@ -54,3 +58,6 @@ t2.join()
 vlm_queue.put(None)
 
 t3.join()
+
+build_index()
+print("[SYSTEM] Frame index built")

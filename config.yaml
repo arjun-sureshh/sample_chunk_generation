@@ -14,6 +14,7 @@ model:
 paths:
   chunks_dir: "result/chunks"
   frames_dir: "result/frames"
+  json_dir: "result/summaries_json"
 
 resize :
   enabled: false          # true = resize, false = keep original

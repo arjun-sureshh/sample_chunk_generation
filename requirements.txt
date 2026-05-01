@@ -7,3 +7,6 @@ pillow
 python-dotenv
 tqdm
 pyyaml
+
+fastapi
+uvicorn
